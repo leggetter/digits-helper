@@ -1,18 +1,33 @@
-function DigitsHelper(key, digitsElId, listener) {
+/**
+ * Digits Helper constructor
+ * 
+ * @param {string} consumerKey Twitter consumer key
+ * @param {string} digitsElId The element ID of the Digits SDK element
+ * @param {DigitsHelperListener} The listener.
+ */
+function DigitsHelper(consumerKey, digitsElId, listener) {
   this.digits = null;
   
-  this.consumerKey = key;
+  this.consumerKey = consumerKey;
   this.listener = listener;
   
   document.getElementById(digitsElId).onload = this._digitsScriptLoaded.bind(this);
 }
 
+/**
+ * Start the login process using Digits. {@link DigitsHelperListener.loggedIn} will be called if the login succeeds,
+ * {@link DigitsHelperListener.loginFailed} will be called if it fails.
+ */
 DigitsHelper.prototype.login = function() {
   this.digits.logIn()
     .done(this._onLogin.bind(this))
     .fail(this._onLoginFailed.bind(this));
 };
 
+/**
+ * Get the current login status. {@link DigitsHelperListener.loginStatus} will be called 
+ * if the login status retrieval succeeds, {@link DigitsHelperListener.loginStatusFailed} will be called if it fails.
+ */
 DigitsHelper.prototype.getLoginStatus = function() {
   this.digits.getLoginStatus()
     .done(this._onLoginStatus.bind(this))
@@ -20,6 +35,8 @@ DigitsHelper.prototype.getLoginStatus = function() {
 };
 
 /*
+ * @private
+ *
  * loginResponse = {
  *   oauth_echo_headers: {
  *     'X-Verify-Credentials-Authorization': string (HTTP Request header)
@@ -28,9 +45,7 @@ DigitsHelper.prototype.getLoginStatus = function() {
  * }
  *
  */
-DigitsHelper.prototype._onLogin = function(loginResponse){
-  println('oAuthEcho Headers: ', loginResponse);
-  
+DigitsHelper.prototype._onLogin = function(loginResponse) {
   var oAuthEchoHeaders = loginResponse.oauth_echo_headers;
   
   // You must POST these headers to your server to safely invoke Digits' API
@@ -48,6 +63,8 @@ DigitsHelper.prototype._onLogin = function(loginResponse){
 };
 
 /*
+ * @private
+ *
  * error = {
  *   type: string,
  *   message: string
@@ -60,6 +77,8 @@ DigitsHelper.prototype._onLoginFailed = function(error){
 }; 
 
 /*
+ * @private
+ * 
  * error = {
  *   type: string,
  *   message: string
@@ -88,10 +107,18 @@ DigitsHelper.prototype._onLoginStatus = function(loginStatusResponse){
   this.listener.loginStatus(this, loginStatusResponse);
 };
 
+/**
+ * Sets the reference to the Twitter Digits SDK object.
+ * 
+ * This is called internally, however there is the opportunity to set this manually for scenarios such as testing.
+ * 
+ * @param {Object} The Twitter Digits SDK object.
+ */
 DigitsHelper.prototype.setDigits = function(digits) {
   this.digits = digits;
 };
 
+/** @private */
 DigitsHelper.prototype._digitsScriptLoaded = function() {
   var self = this;
   
