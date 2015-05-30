@@ -1,0 +1,27 @@
+{
+  "name": "digits-helper",
+  "version": "0.2.0",
+  "authors": [
+    "leggetter <phil@leggetter.co.uk>"
+  ],
+  "description": "A helper wrapper for Digits by Twitter",
+  "main": "src/DigitsHelper.js",
+  "moduleType": [
+    "globals"
+  ],
+  "keywords": [
+    "Twitter",
+    "Digits",
+    "Authentication",
+    "Helper"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/leggetter/digits-helper",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
