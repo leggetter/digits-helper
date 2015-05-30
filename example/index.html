@@ -1,0 +1,72 @@
+<html>
+<head>
+  <script id="digits_sdk_js" src="https://cdn.digits.com/1/sdk.js" async></script>
+  <script id="digits_helper_js" src="../src/DigitsHelper.js" async></script>
+</head>
+<body>
+  <input type="button" id="login_btn" value="Login" />
+  <input type="button" id="login_status_btn" value="Get login status" />
+  
+  <script>
+    function println(text, response) {
+      var message = document.createElement('p');
+      message.innerText = text;
+      
+      if (response){
+        var code = document.createElement('code');
+        code.innerText = typeof response == 'string' ? response : JSON.stringify(response);
+        message.appendChild(code);
+      }
+      
+      document.body.appendChild(message);
+    } 
+    
+    var listener = {
+      loaded: function(helper) {
+        println('SDK Loaded');
+      },
+      
+      initialized: function(helper) {
+        println("Digits is initialized");
+        
+        var loginBtn = document.getElementById('login_btn');
+        loginBtn.addEventListener('click', helper.login.bind(helper));
+        
+        var statusBtn = document.getElementById('login_status_btn');
+        statusBtn.addEventListener('click', helper.getLoginStatus.bind(helper));
+      },
+      
+      initializationFailed: function(helper) {
+        println("Digits failed to initialize");
+      },
+      
+      loggedIn: function(helper, oAuthHeaders) {
+        println('oAuthHeaders', oAuthHeaders);
+        
+        // For DEMO purposes 
+        var requestUrl = ["curl '", oAuthHeaders.apiUrl, "' -H 'Authorization: ", oAuthHeaders.headers, "'"].join('');
+        println('cURL:'); 
+        println('', requestUrl);
+      },
+      
+      loginFailed: function(helper, error) {
+        println('Login error: ', error);
+      },
+      
+      loginStatus: function(helper, loginStatusResponse) {
+        println('Login status: ', loginStatusResponse);
+      },
+      
+      loginStatusFailed: function(helper, error) {
+        println('Login status error: ', error);
+      }
+    };
+    
+    function digitsHelperLoaded() {
+      var digits = new DigitsHelper('gmoaaZhEG88hMQUdpWHnF1IAz', 'digits_sdk_js', listener);
+    }
+    
+    document.getElementById('digits_helper_js').onload = digitsHelperLoaded;
+  </script>
+</body>
+</html>
