@@ -66,7 +66,7 @@ function digitsHelperLoaded() {
 	var twitterConsumerKey = 'YOUR_TWITTER_CONSUMER_KEY';
 	
   // Remember to pass in the listener
-	var digitsHelper = new DigitsHelper(twitterConsumerKey, digitsElementId, listener);
+  var digitsHelper = new DigitsHelper(twitterConsumerKey, digitsElementId, listener);
 }
 
 document.getElementById('#digits_helper_js').onload = digitsHelperLoaded;
